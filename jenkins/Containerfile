@@ -1,0 +1,23 @@
+FROM docker.io/library/debian:bullseye
+
+
+ENV TOMCAT_URL https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.81/bin/apache-tomcat-8.5.81.tar.gz
+ENV JENKINS_URL https://get.jenkins.io/war-stable/2.346.1/jenkins.war
+
+ENV NON_PRIV_USR tomcat-non-root
+ENV WEB_ROOT /home/${NON_PRIV_USR}
+
+
+RUN apt-get update
+RUN apt-get dist-upgrade -y
+RUN apt-get install -y wget openjdk-11-jdk && apt-get autoclean
+
+RUN useradd -u 8877 -s /bin/bash ${NON_PRIV_USR}
+USER ${NON_PRIV_USR}
+
+WORKDIR ${WEB_ROOT}
+
+RUN wget ${TOMCAT_URL} && tar xzvf apache-tomcat-8.5.81.tar.gz
+RUN wget ${JENKINS_URL} -P /home/${NON_PRIV_USR}/apache-tomcat-8.5.81/webapps
+
+CMD ["apache-tomcat-8.5.81/bin/catalina.sh","run"]
