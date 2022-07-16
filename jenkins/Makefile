@@ -1,3 +1,7 @@
+BASE_IMG_NAME=debian
+BASE_IMG_VERSION=bullseye
+BASE_IMG_REPO=docker.io/library
+
 IMG_NAME=jenkins
 IMG_VERSION=lts-2.346.2
 CT_NAME=${IMG_NAME}_ct
@@ -16,3 +20,6 @@ build:
 
 run:
 	podman run -d -p 8080:8080 --name ${CT_NAME} ${MAINTAINER}/${IMG_NAME}:${IMG_VERSION}
+
+update-base-img:
+	podman pull ${BASE_IMG_REPO}/${BASE_IMG_NAME}:${BASE_IMG_VERSION}
