@@ -1,4 +1,4 @@
-FROM docker.io/library/debian:bullseye
+FROM docker.io/library/debian:bullseye AS builder
 
 ENV JENKINS_VERSION war-stable/2.346.2
 ENV JENKINS_URL https://get.jenkins.io/${JENKINS_VERSION}/jenkins.war
@@ -9,7 +9,7 @@ ENV JENKINS_HOME /home/${JENKINS_USER}
 
 RUN apt-get update
 RUN apt-get dist-upgrade -y
-RUN apt-get install -y wget openjdk-11-jdk && apt-get autoclean
+RUN apt-get install -y wget && apt-get autoclean
 
 RUN useradd -u 8877 -m -s /bin/bash ${JENKINS_USER}
 USER ${JENKINS_USER}
@@ -17,5 +17,23 @@ USER ${JENKINS_USER}
 WORKDIR ${JENKINS_HOME}
 
 RUN wget ${JENKINS_URL} -P ${JENKINS_HOME}
+
+USER root
+
+RUN apt-get purge -y wget
+
+# # #
+
+FROM builder AS final
+USER root
+
+RUN apt-get install -y openjdk-11-jre && apt-get autoclean && apt-get autoremove -y
+
+USER ${JENKINS_USER}
+
+WORKDIR ${JENKINS_HOME} 
+
+COPY --from=builder ${JENKINS_HOME}/jenkins.war ${JENKINS_HOME}/jenkins.war
+
 
 CMD ["/usr/bin/java","-jar","jenkins.war"]
