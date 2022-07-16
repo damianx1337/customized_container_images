@@ -1,7 +1,7 @@
 IMG_NAME=jenkins
-IMG_VERSION=2.346.1
+IMG_VERSION=lts-2.346.2
 CT_NAME=${IMG_NAME}_ct
-MAINTAINER=
+MAINTAINER=to_be_set
 CT_FILE=Containerfile
 
 test:
