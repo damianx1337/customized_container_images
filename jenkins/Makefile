@@ -1,5 +1,5 @@
-BASE_IMG_NAME=debian
-BASE_IMG_VERSION=bullseye
+BASE_IMG_NAME=alpine
+BASE_IMG_VERSION=3.16.0
 BASE_IMG_REPO=docker.io/library
 
 IMG_NAME=jenkins
@@ -20,6 +20,12 @@ build:
 
 run:
 	podman run -d -p 8080:8080 --name ${CT_NAME} ${MAINTAINER}/${IMG_NAME}:${IMG_VERSION}
+
+shell-connect:
+	podman exec -it ${CT_NAME} sh
+
+view-logs:
+	podman logs ${CT_NAME}
 
 update-base-img:
 	podman pull ${BASE_IMG_REPO}/${BASE_IMG_NAME}:${BASE_IMG_VERSION}

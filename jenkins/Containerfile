@@ -1,4 +1,4 @@
-FROM docker.io/library/debian:bullseye AS builder
+FROM docker.io/library/alpine:3.16.0 AS builder
 
 ENV JENKINS_VERSION war-stable/2.346.2
 ENV JENKINS_URL https://get.jenkins.io/${JENKINS_VERSION}/jenkins.war
@@ -7,11 +7,11 @@ ENV JENKINS_USER jenkins
 ENV JENKINS_HOME /home/${JENKINS_USER}
 
 
-RUN apt-get update
-RUN apt-get dist-upgrade -y
-RUN apt-get install -y wget && apt-get autoclean
+RUN apk update
+RUN apk upgrade --available
+RUN apk add --no-cache wget
 
-RUN useradd -u 8877 -m -s /bin/bash ${JENKINS_USER}
+RUN addgroup -S ${JENKINS_USER} && adduser -S ${JENKINS_USER} -G ${JENKINS_USER}
 USER ${JENKINS_USER}
 
 WORKDIR ${JENKINS_HOME}
@@ -20,14 +20,14 @@ RUN wget ${JENKINS_URL} -P ${JENKINS_HOME}
 
 USER root
 
-RUN apt-get purge -y wget
+RUN apk del wget
 
 # # #
 
 FROM builder AS final
 USER root
 
-RUN apt-get install -y openjdk-11-jre && apt-get autoclean && apt-get autoremove -y
+RUN apk add --no-cache openjdk8-jre
 
 USER ${JENKINS_USER}
 
