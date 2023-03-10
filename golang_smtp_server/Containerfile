@@ -1,0 +1,20 @@
+FROM docker.io/library/golang:latest AS builder
+
+WORKDIR /home/go/src
+RUN git clone https://github.com/flashmob/go-guerrilla.git
+RUN go mod init go-guerrilla
+RUN mv go.mod go-guerrilla/ && cd go-guerrilla && go mod tidy && make guerrillad
+
+FROM docker.io/library/debian:bullseye
+RUN apt-get update && apt-get dist-upgrade -y && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl
+RUN useradd -m -d /home/noadm -s /bin/bash noadm
+COPY --from=builder /home/go/src/go-guerrilla/guerrillad /home/noadm
+COPY goguerrilla.conf.json /home/noadm
+
+WORKDIR /home/noadm
+
+USER noadm
+
+RUN openssl req -newkey rsa:2048 -nodes -keyout test.com.key -x509 -days 365 -out test.com.crt -subj "/C=PE/ST=Lima/L=Lima/O=Acme Inc. /OU=IT Department/CN=test.com"
+
+CMD ["./guerrillad","serve"]
