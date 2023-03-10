@@ -1,0 +1,13 @@
+FROM docker.io/library/debian:bullseye
+
+RUN apt-get update && apt-get dist-upgrade -y && DEBIAN_FRONTEND=noninteractive apt-get install -y postfix sudo
+
+# sudo needed to be able to execute postfix commands...only allowing combi with specific though.
+
+RUN useradd -m -d /home/noadm -s /bin/bash noadm
+RUN gpasswd -a noadm sudo
+COPY noadm /etc/sudoers.d/noadm
+
+USER noadm
+
+CMD ["sudo","postfix","start-fg"]
