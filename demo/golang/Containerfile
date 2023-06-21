@@ -1,0 +1,18 @@
+FROM docker.io/library/golang:latest AS builder
+
+COPY src/main.go /home/go/src/
+WORKDIR /home/go/src
+RUN go mod init demo
+RUN go mod tidy
+RUN go build
+
+FROM docker.io/library/debian:bullseye
+RUN apt-get update && apt-get dist-upgrade -y # && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl
+RUN useradd -m -d /home/noadm -s /bin/bash noadm
+COPY --from=builder /home/go/src/demo /home/noadm
+
+WORKDIR /home/noadm
+
+USER noadm
+
+CMD ["./demo"]
