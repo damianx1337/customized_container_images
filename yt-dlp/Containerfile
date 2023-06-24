@@ -1,0 +1,21 @@
+FROM docker.io/library/debian:bullseye
+
+#ENV USER tor
+
+RUN apt-get update
+RUN apt-get dist-upgrade -y
+RUN apt-get install -y ffmpeg python3 python3-venv tor
+RUN apt-get install -y sudo
+
+RUN useradd -u 8877 -s /bin/bash non-root_usr
+RUN echo "non-root_usr ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/non-root_usr
+USER non-root_usr
+
+WORKDIR /home/non-root_usr
+
+RUN python3 -m venv /home/non-root_usr/yt_dlp_env
+RUN . /home/non-root_usr/yt_dlp_env/bin/activate && pip install yt-dlp && deactivate
+RUN echo "torsocks yt-dlp -x --audio-format mp3 --audio-quality 0 \"\$1\"" > pull_mp3.sh
+
+
+CMD ["/bin/bash"]
