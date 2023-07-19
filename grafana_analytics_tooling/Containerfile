@@ -1,0 +1,22 @@
+FROM docker.io/library/debian:bullseye
+
+RUN apt-get update
+RUN apt-get dist-upgrade -y
+RUN apt-get install -y wget
+
+RUN useradd -u 8877 -s /bin/bash non-root
+USER non-root
+
+WORKDIR /home/non-root
+
+# download adaptive-cli binary from https://grafana.com/docs/grafana-cloud/data-configuration/metrics/manage-metrics-costs-via-adaptive-metrics/?pg=prometheus-cardinality-optimization&plcmt=hero-btn-2
+RUN wget https://dl.grafana.com/files/adaptive-cli/adaptive-cli.linux.amd64
+RUN wget https://github.com/grafana/mimir/releases/download/mimir-2.9.0/mimirtool-linux-amd64
+
+USER root
+RUN chmod +x /home/non-root/adaptive-cli.linux.amd64
+RUN chmod +x /home/non-root/mimirtool-linux-amd64
+
+USER non-root
+
+CMD ["/bin/bash"]
