@@ -1,5 +1,5 @@
 VTAG=$(shell date +"%y%m%d")
-MAINTAINER=<set_it>
+MAINTAINER=dnsobc
 APP_NAME=yt-dlp
 
 
