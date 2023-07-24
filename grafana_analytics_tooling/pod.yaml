@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: grafana-analytics-pod
+  namespace: default
+spec:
+  containers:
+  - name: grafana-analytics
+    image: dnsobc/grafana-analytics-tooling:latest-linux-amd64
+    command: ["/bin/bash", "-c", "--"]
+    args: ["while true; do sleep 30; done;"]
+#    env:
+#      - name: VARIABLE
+#        value: "value"
