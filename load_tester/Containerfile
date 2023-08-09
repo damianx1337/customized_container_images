@@ -1,0 +1,20 @@
+FROM docker.io/library/debian:bullseye-slim
+
+RUN apt-get update
+RUN apt-get dist-upgrade -y
+RUN apt-get install -y wget
+
+RUN useradd -u 8877 -s /bin/bash non-root
+USER non-root
+
+WORKDIR /home/non-root
+
+RUN wget https://github.com/tsenart/vegeta/releases/download/v12.11.0/vegeta_12.11.0_linux_amd64.tar.gz
+RUN tar xzvf vegeta_12.11.0_linux_amd64.tar.gz
+
+USER root
+RUN chmod +x /home/non-root/vegeta
+
+USER non-root
+
+CMD ["/bin/bash"]
