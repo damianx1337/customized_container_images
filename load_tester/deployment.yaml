@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-tester-deployment
+  labels:
+    app: vegeta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vegeta
+  template:
+    metadata:
+      labels:
+        app: vegeta
+    spec:
+      containers:
+      - name: vegeta
+        image: dnsobc/load-tester:linux-amd64
+        imagePullPolicy: Always
+        command: ["/bin/bash", "-c", "--"]
+        args: ["while true; do sleep 30; done;"]
