@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+  "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +27,8 @@ func listenAndServe(port string) {
 }
 
 func main() {
+  http.Handle("/metrics", promhttp.Handler())
+
 	http.HandleFunc("/", helloHandler)
 	port := os.Getenv("PORT")
 	if len(port) == 0 {

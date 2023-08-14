@@ -6,7 +6,7 @@ RUN go mod init demo
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 
-FROM docker.io/library/debian:bullseye
+FROM docker.io/library/debian:bullseye-slim
 RUN apt-get update && apt-get dist-upgrade -y # && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl
 RUN useradd -m -d /home/noadm -s /bin/bash noadm
 COPY --from=builder /home/go/src/demo /home/noadm
