@@ -2,7 +2,7 @@ FROM docker.io/library/debian:bullseye-slim
 
 RUN apt-get update
 RUN apt-get dist-upgrade -y
-RUN apt-get install -y wget
+RUN apt-get install -y wget jq
 
 RUN useradd -u 8877 -s /bin/bash non-root
 USER non-root
