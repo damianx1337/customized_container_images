@@ -6,6 +6,8 @@ import (
 	"os"
 
   "github.com/prometheus/client_golang/prometheus/promhttp"
+
+  _ "net/http/pprof"
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
