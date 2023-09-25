@@ -1,0 +1,19 @@
+FROM docker.io/library/golang:1.20.5 AS builder
+
+COPY src/sendMsg.go /home/go/src/
+WORKDIR /home/go/src
+RUN go mod init aws-sqs-tester
+#RUN go get -u github.com/google/pprof
+RUN go mod tidy
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
+
+FROM docker.io/library/debian:bullseye-slim
+RUN apt-get update && apt-get dist-upgrade -y # && DEBIAN_FRONTEND=noninteractive apt-get install -y graphviz gv # openssl
+RUN useradd -m -d /home/noadm -s /bin/bash noadm
+COPY --from=builder /home/go/src/aws-sqs-tester /home/noadm
+
+WORKDIR /home/noadm
+
+USER noadm
+
+CMD ["/bin/bash"]
