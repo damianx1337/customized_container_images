@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-webserver-service
+  namespace: default
+spec:
+  selector:
+    app.kubernetes.io/name: golang-webserver
+  ports:
+    - name: http-port
+      protocol: TCP
+      port: 80
+      targetPort: http
+---

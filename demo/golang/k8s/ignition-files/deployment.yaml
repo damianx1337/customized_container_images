@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-webserver-deployment
+  labels:
+    app: golang-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: golang-webserver
+  template:
+    metadata:
+      labels:
+        app: golang-webserver
+    spec:
+      containers:
+      - name: golang-webserver
+        image: dnsobc/golang-demo-webapp:linux-amd64
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
