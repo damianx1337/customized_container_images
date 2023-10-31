@@ -1,0 +1,22 @@
+FROM docker.io/library/debian:bookworm-slim
+
+RUN apt-get update
+RUN apt-get dist-upgrade -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ruby ruby-dev ubuntu-dev-tools
+
+RUN useradd -u 8877 -s /bin/bash non-root
+
+RUN gem install bundler jekyll
+RUN gem install rexml -v 3.2.6
+RUN gem install jekyll-seo-tag -v 2.8.0
+RUN gem install jekyll-feed -v 0.17.0
+RUN gem install minima -v 2.5.1
+
+USER non-root
+
+WORKDIR /home/non-root
+
+RUN jekyll new my-awesome-site
+WORKDIR /home/non-root/my-awesome-site
+
+CMD ["bundle","exec","jekyll","serve","--host","0.0.0.0"]
