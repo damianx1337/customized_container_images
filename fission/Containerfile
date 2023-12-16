@@ -1,8 +1,8 @@
-FROM --platform=linux/amd64 docker.io/library/debian:bookworm-slim
+FROM --platform=linux/arm64 docker.io/library/debian:bookworm-slim
 
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y curl
 
-RUN curl -Lo fission https://github.com/fission/fission/releases/download/v1.20.0/fission-v1.20.0-linux-amd64 && chmod +x fission && mv fission /usr/local/bin/
+RUN curl -Lo fission https://github.com/fission/fission/releases/download/v1.20.0/fission-v1.20.0-linux-arm64 && chmod +x fission && mv fission /usr/local/bin/
 
 RUN useradd -m -d /home/noadm -s /bin/bash noadm
 WORKDIR /home/noadm
