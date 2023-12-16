@@ -1,4 +1,4 @@
-FROM docker.io/library/debian:bookworm-slim
+FROM --platform=linux/amd64 docker.io/library/debian:bookworm-slim
 
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y curl
 
