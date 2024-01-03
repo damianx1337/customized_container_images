@@ -3,12 +3,11 @@ MAINTAINER=dnsobc
 APP_NAME=yt-dlp
 
 
-test:
-	echo ${VTAG}
-	echo ${MAINTAINER}
-
 build:
 	podman build -f Containerfile -t ${MAINTAINER}/${APP_NAME}:${VTAG}
+	podman image prune
+	podman builder prune
+	podman system prune
 
 run:
 	podman run --rm -it --name ${APP_NAME}_ct ${MAINTAINER}/${APP_NAME}:${VTAG}

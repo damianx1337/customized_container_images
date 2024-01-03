@@ -1,4 +1,4 @@
-FROM docker.io/library/debian:bullseye-slim
+FROM docker.io/library/debian:bookworm-slim
 
 #ENV USER tor
 
