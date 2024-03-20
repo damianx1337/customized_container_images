@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+	name:
+	namespace:
+	labels:
+		app.kubernetes.io/name: redis
+spec:
+	serviceAccount:
+	containers:
+	- name: redis
+		image:
+		imagePullPolicy: Always
+		command:
+			- redis-server
+			- "/redis-master/redis.conf"
+			- --tls-port 6379
+			- --port 0
+			- --tls-cert-file ""
+			- --tls-key-file ""
+			- --tls-ca-cert-file ""
+			#- --tls-auth-clients no
+			- --requirepass $(REDIS_PASS)
+		env:
+		- name: MASTER
+			value: true
+		- name: REDIS_PASS
+			valueFrom:
+				secretKeyRef:
+					name: k8s-secret-redis
+					key: password
+		ports:
+		- containerPort: 6379
+			name: redis-tls-port
+		resources:
+			limits:
+				cpu: "0.1"
+		volumeMounts:
+		- mountPath: /redis-master-data
+			name: data
+		- mountPath: /redis-master
+			name: config
+			readOnly: true
+	volumes:
+	- name: redis-secret-tls-certs
+		secret:
+			secretName: k8s-secret-redis-tls-certs
+	- name: data
+		emptyDir: {}
+	- name: config
+		configMap:
+			name: redis-cm
+			items:
+			- key: redis-config
+				path: redis.conf
