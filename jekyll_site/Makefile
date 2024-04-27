@@ -5,6 +5,9 @@ APP_NAME=jekyll-site
 
 build:
 	podman build -f Containerfile -t ${MAINTAINER}/${APP_NAME}:${VTAG}
+	podman image prune -f
+	podman builder prune -f
+	podman system prune -f
 
 run-it:
 	podman run --rm -it -p 4000:4000 --name ${APP_NAME}_ct ${MAINTAINER}/${APP_NAME}:${VTAG}
