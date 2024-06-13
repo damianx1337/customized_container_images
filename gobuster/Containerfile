@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1
+
+FROM docker.io/library/debian:bookworm-slim
+
+RUN apt-get update && apt-get dist-upgrade -y
+RUN apt-get install -y tor sudo wget
+
+RUN useradd -u 8877 -s /bin/bash non-root
+RUN echo "non-root ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/non-root
+USER non-root
+
+WORKDIR /home/non-root
+
+RUN wget https://github.com/OJ/gobuster/releases/download/v3.6.0/gobuster_Linux_x86_64.tar.gz
+RUN tar xzvf gobuster_Linux_x86_64.tar.gz
+
+RUN wget https://github.com/rapid7/metasploit-framework/blob/master/data/wordlists/common_roots.txt
+RUN wget https://github.com/rapid7/metasploit-framework/blob/master/data/wordlists/namelist.txt
+
+CMD ["/bin/bash"]
