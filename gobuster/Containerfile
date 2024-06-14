@@ -14,7 +14,7 @@ WORKDIR /home/non-root
 RUN wget https://github.com/OJ/gobuster/releases/download/v3.6.0/gobuster_Linux_x86_64.tar.gz
 RUN tar xzvf gobuster_Linux_x86_64.tar.gz
 
-RUN wget https://github.com/rapid7/metasploit-framework/blob/master/data/wordlists/common_roots.txt
-RUN wget https://github.com/rapid7/metasploit-framework/blob/master/data/wordlists/namelist.txt
+RUN wget https://raw.githubusercontent.com/rapid7/metasploit-framework/master/data/wordlists/common_roots.txt
+RUN wget https://raw.githubusercontent.com/rapid7/metasploit-framework/master/data/wordlists/namelist.txt
 
 CMD ["/bin/bash"]
