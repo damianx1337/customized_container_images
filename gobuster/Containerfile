@@ -16,5 +16,7 @@ RUN tar xzvf gobuster_Linux_x86_64.tar.gz
 
 RUN wget https://raw.githubusercontent.com/rapid7/metasploit-framework/master/data/wordlists/common_roots.txt
 RUN wget https://raw.githubusercontent.com/rapid7/metasploit-framework/master/data/wordlists/namelist.txt
+RUN wget https://raw.githubusercontent.com/daviddias/node-dirbuster/master/lists/directory-list-2.3-medium.txt
+RUN wget https://raw.githubusercontent.com/digination/dirbuster-ng/master/wordlists/common.txt
 
 CMD ["/bin/bash"]
