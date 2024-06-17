@@ -1,21 +1,39 @@
-FROM docker.io/library/debian:bullseye-slim
+# syntax=docker/dockerfile:1
+
+FROM docker.io/library/debian:bookworm-slim
 
 RUN apt-get update
 RUN apt-get dist-upgrade -y
-RUN apt-get install -y wget jq
+RUN apt-get install -y curl \
+												wget \
+												jq \
+												git \
+												python3 \
+												python3-venv \
+												python3-scapy \
+												openssl \
+												nmap \
+												vim
+												#nikto \ # not in Debian APT Repo
 
 RUN useradd -u 8877 -s /bin/bash non-root
 USER non-root
 
 WORKDIR /home/non-root
 
-RUN wget https://github.com/tsenart/vegeta/releases/download/v12.11.0/vegeta_12.11.0_linux_amd64.tar.gz
-RUN tar xzvf vegeta_12.11.0_linux_amd64.tar.gz
-RUN rm vegeta_12.11.0_linux_amd64.tar.gz
+RUN wget https://github.com/tsenart/vegeta/releases/download/v12.11.1/vegeta_12.11.1_linux_amd64.tar.gz
+RUN tar xzvf vegeta_12.11.1_linux_amd64.tar.gz
+RUN rm vegeta_12.11.1_linux_amd64.tar.gz
 
 USER root
 RUN chmod +x /home/non-root/vegeta
 
-USER non-root
+#USER non-root
+USER root
+
+RUN git clone https://github.com/ticarpi/jwt_tool
+RUN python3 -m venv pyenv_jwt_tool
+RUN . /home/non-root/pyenv_jwt_tool/bin/activate && pip install termcolor cprint pycryptodomex requests && deactivate
+#RUN cd jwt_tool && python3 -m pip install termcolor cprint pycryptodomex requests
 
 CMD ["/bin/bash"]
