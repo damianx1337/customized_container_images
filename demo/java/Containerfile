@@ -1,8 +1,0 @@
-FROM docker.io/library/debian:bullseye
-
-RUN apt-get update
-RUN apt-get dist-upgrade -y
-
-COPY src/Hello.class /
-
-CMD ["/bin/bash"]
